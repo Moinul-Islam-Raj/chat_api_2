@@ -13,7 +13,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon start",
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
