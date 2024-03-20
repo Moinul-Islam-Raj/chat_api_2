@@ -7,12 +7,12 @@ const connectToMongoDb = require('./utils/connectToMongoDb.js');
 const authRouter = require('./routes/auth.routes.js');
 const messageRouter = require('./routes/message.routes.js');
 const userRouter = require('./routes/user.routes.js');
+const {app, server} = require('./socket/socket.js')
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 // middlewares
-const app = express();
 app.use(express.json());
 app.use(cors({
     credentials:true,
@@ -26,7 +26,7 @@ app.use('/api/messages/', messageRouter);
 app.use('/api/users/', userRouter);
 
 // connection
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     connectToMongoDb();
     console.log('Server Started at port ' + PORT);
 })

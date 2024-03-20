@@ -1,5 +1,6 @@
 const Message = require('../models/message.model.js');
 const Conversation = require('../models/conversation.model.js');
+const {io, getSocketId} = require('../socket/socket.js');
 
 const sendMessage = async (req, res) => {
     try{
@@ -25,6 +26,10 @@ const sendMessage = async (req, res) => {
         const updatedConversation = await Conversation.findOne({
             participants:{$all: [senderId, reciepientId]}
         }).populate('messages');
+
+        const socketId = getSocketId(reciepientId);
+        io.to(socketId).emit('newMessage', message);
+        
         res.status(200).json(updatedConversation.messages);
     }
     catch (error){
