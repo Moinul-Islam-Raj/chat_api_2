@@ -1,5 +1,6 @@
 const Message = require('../models/message.model.js');
 const Conversation = require('../models/conversation.model.js');
+const User = require('../models/user.model.js')
 const {io, getSocketId} = require('../socket/socket.js');
 
 const sendMessage = async (req, res) => {
@@ -27,8 +28,10 @@ const sendMessage = async (req, res) => {
             participants:{$all: [senderId, reciepientId]}
         }).populate('messages');
 
+        const senderName = req.user.fullName;
+
         const socketId = getSocketId(reciepientId);
-        io.to(socketId).emit('newMessage', message);
+        io.to(socketId).emit('newMessage', {message, senderName});
         
         res.status(200).json(updatedConversation.messages);
     }
